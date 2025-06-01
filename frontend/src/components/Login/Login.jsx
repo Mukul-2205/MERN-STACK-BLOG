@@ -1,11 +1,29 @@
 import React, { useState } from 'react'
-import {Link} from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import axios from 'axios'
 function Login() {
-    const [email, setEmail]=useState("")
+    const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
+    const navigate=useNavigate()
+    const handleLogin = async (e) => {
+        e.preventDefault()
+        console.log(email, password);
 
-    const handleLogin=()=>{
+        try {
+            const res = await axios.post('http://localhost:8000/api/v1/user/login', { email, password }, {
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                withCredentials: true
+            })
 
+            if (res.data.success) {
+                navigate('/home')
+                alert("Logged in Successfully!!")
+            }
+        } catch (error) {
+            alert(error)
+        }
     }
     return (
         <>

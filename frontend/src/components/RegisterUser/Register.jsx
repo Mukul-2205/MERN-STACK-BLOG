@@ -24,7 +24,8 @@ function Register() {
                 alert("Registered Successfully!!")
             }
         } catch (error) {
-            alert(error.messasge)
+            console.log(error);
+    
         }
     }
     return (
@@ -38,7 +39,7 @@ function Register() {
                         <form className="space-y-4 md:space-y-6" onSubmit={handleRegister}>
                             {/* Full Name */}
                             <div>
-                                <label htmlFor="name" className="block mb-2 text-sm font-semibold text-black/90">
+                                <label htmlFor="firstName" className="block mb-2 text-sm font-semibold text-black/90">
                                     First Name
                                 </label>
                                 <input
@@ -54,7 +55,7 @@ function Register() {
                             </div>
                             
                             <div>
-                                <label htmlFor="name" className="block mb-2 text-sm font-semibold text-black/90">
+                                <label htmlFor="lastName" className="block mb-2 text-sm font-semibold text-black/90">
                                     Last Name
                                 </label>
                                 <input
