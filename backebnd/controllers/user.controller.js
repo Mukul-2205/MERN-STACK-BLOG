@@ -118,7 +118,10 @@ export const login = async(req,res)=>{
             .json(
                 {
                     success: true,
-                    message: `Welcome ${user.firstName} ${user.lastName} !!`
+                    message: `Welcome ${user.firstName} ${user.lastName} !!`,
+                    user: loggedInUser,
+                    refreshToken,
+                    accessToken
                 }
             )
 
