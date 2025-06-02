@@ -1,8 +1,8 @@
-import { Button } from "../ui/button";
-import { ChevronRightIcon } from "lucide-react";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
 export default function HeroSection() {
+    const { isAuthenticated } = useSelector((state) => state.auth)
     return (
         <div className="flex items-center justify-center px-4 py-24 md:px-6 lg:py-32">
             <div className="w-full max-w-4xl rounded-2xl border border-white/30 bg-white/10 backdrop-blur-xl shadow-xl p-10 text-white">
@@ -23,12 +23,24 @@ export default function HeroSection() {
 
                 {/* Buttons */}
                 <div className="mt-8 flex justify-center gap-3">
-                    <Link
-                        to="/login"
-                        className="px-4 py-2 text-white font-medium bg-pink-600 hover:bg-pink-700 rounded-md transition"
-                    >
-                        Get Started
-                    </Link>
+                    {
+                        !isAuthenticated ? (
+                            <Link
+                                to="/login"
+                                className="px-4 py-2 text-white font-medium bg-pink-600 hover:bg-pink-700 rounded-md transition"
+                            >
+                                Get Started
+                            </Link>
+                        ) : (
+                            <Link
+                                to="/blogs"
+                                className="px-4 py-2 text-white font-medium bg-pink-600 hover:bg-pink-700 rounded-md transition"
+                            >
+                                See Blogs
+                            </Link>
+                        )
+                    }
+
                 </div>
 
                 {/* Info Footer */}

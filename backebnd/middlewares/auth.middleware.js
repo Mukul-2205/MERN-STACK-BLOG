@@ -28,6 +28,8 @@ export const verifyJWT=async(req,res,next)=>{
         req.user=user;
         next()
     } catch (error) {
+        console.log("error in auth middleware");
+        
         return res.status(400).json(
             {
                 success: false,

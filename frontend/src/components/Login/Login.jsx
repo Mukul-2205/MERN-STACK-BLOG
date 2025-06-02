@@ -1,10 +1,13 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
+import { useDispatch } from 'react-redux'
+import { setUser } from '../../Store/authSlice'
 function Login() {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const navigate=useNavigate()
+    const dispatch=useDispatch()
     const handleLogin = async (e) => {
         e.preventDefault()
         console.log(email, password);
@@ -16,8 +19,10 @@ function Login() {
                 },
                 withCredentials: true
             })
-
+            console.log(res);
+            
             if (res.data.success) {
+                dispatch(setUser(res.data.user))
                 navigate('/home')
                 alert("Logged in Successfully!!")
             }

@@ -6,7 +6,8 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import Login from './components/Login/Login.jsx'
 import Register from './components/RegisterUser/Register.jsx'
 import Home from './components/Home/Home.jsx'
-
+import { Provider } from 'react-redux'
+import store from './Store/store'
 const router=createBrowserRouter([
   {
     path:'/',
@@ -30,6 +31,8 @@ const router=createBrowserRouter([
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <RouterProvider router={router}/>
+    <Provider store={store}>
+      <RouterProvider router={router}/>
+    </Provider>
   </StrictMode>
 )
