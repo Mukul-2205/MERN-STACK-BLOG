@@ -8,6 +8,7 @@ import Register from './components/RegisterUser/Register.jsx'
 import Home from './components/Home/Home.jsx'
 import { Provider } from 'react-redux'
 import store from './Store/store'
+import Dashboard from './components/DashBoard/Dashboard'
 const router=createBrowserRouter([
   {
     path:'/',
@@ -24,6 +25,10 @@ const router=createBrowserRouter([
       {
         path: '/register',
         element: <Register/>
+      },
+      {
+        path:"/dashboard",
+        element:<Dashboard/>
       }
     ]
   }
