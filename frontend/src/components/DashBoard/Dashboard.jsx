@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { User, PenLine, FileText, Settings, LogOut, Menu, X } from 'lucide-react'
+import { User, PenLine, FileText, Menu, X } from 'lucide-react'
 import Navbar from '../Navbar/Navbar'
-
+import { Avatar, AvatarImage } from "@/components/ui/avatar"
 export default function Dashboard() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
 
@@ -75,21 +75,32 @@ export default function Dashboard() {
           }`}>
           <div className="p-8">
             <div className="max-w-4xl mx-auto">
+
               <h1 className="text-3xl font-bold mb-6">Welcome Back, Mukul</h1>
-              <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 mb-6">
-                <h2 className="text-xl font-semibold mb-4">Profile Information</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-gray-300">
-                  <div>
-                    <p className="font-medium">Name:</p>
-                    <p>Mukul Kumar</p>
-                  </div>
-                  <div>
-                    <p className="font-medium">Email:</p>
-                    <p>mukul@example.com</p>
-                  </div>
-                  <div className="md:col-span-2">
-                    <p className="font-medium">Bio:</p>
-                    <p>CSE student at MNIT Jaipur, passionate about web development and security.</p>
+              <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 mb-6 flex flex-col md:flex-row gap-6 items-center md:items-start">
+                {/* Avatar Section */}
+                <div className="shrink-0">
+                  <Avatar className="w-40 h-40">
+                    <AvatarImage src="https://github.com/shadcn.png" />
+                  </Avatar>
+                </div>
+
+                {/* Profile Info Section */}
+                <div className="flex-1 text-gray-300">
+                  <h2 className="text-xl font-semibold mb-4">Profile Information</h2>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <p className="font-medium">Name:</p>
+                      <p>Mukul Kumar</p>
+                    </div>
+                    <div>
+                      <p className="font-medium">Email:</p>
+                      <p>mukul@example.com</p>
+                    </div>
+                    <div className="md:col-span-2">
+                      <p className="font-medium">Bio:</p>
+                      <p>CSE student at MNIT Jaipur, passionate about web development and security.</p>
+                    </div>
                   </div>
                 </div>
               </div>
