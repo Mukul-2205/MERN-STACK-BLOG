@@ -5,16 +5,24 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { logout as authSliceLogout } from '../../Store/authSlice';
 import axios from 'axios';
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 
 function Navbar() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isSearchOpen, setIsSearchOpen] = useState(false);
     const { isAuthenticated, user } = useSelector((state) => state.auth);
     const dispatch = useDispatch();
-    const navigate=useNavigate();
+    const navigate = useNavigate();
     const handleLogout = async () => {
         try {
-            const res = await axios.post('http://localhost:8000/api/v1/user/logout',{}, { withCredentials: true })
+            const res = await axios.post('http://localhost:8000/api/v1/user/logout', {}, { withCredentials: true })
             if (res.data.success) {
                 navigate('/home')
                 dispatch(authSliceLogout())
@@ -69,9 +77,21 @@ function Navbar() {
                                 >
                                     Logout
                                 </button>
-                                <Avatar className="h-8 w-8 cursor-pointer border border-white/30 ">
-                                    {getAvatarContent()}
-                                </Avatar>
+                                <DropdownMenu>
+                                    <DropdownMenuTrigger>
+                                        <Avatar className="h-8 w-8 cursor-pointer border border-white/30 ">
+                                            {getAvatarContent()}
+                                        </Avatar>
+                                    </DropdownMenuTrigger>
+                                    <DropdownMenuContent className='text-white bg-black'>
+                                        <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                                        <DropdownMenuSeparator />
+                                        <Link to='/dashboard'> <DropdownMenuItem className='cursor-pointer '>Profile</DropdownMenuItem></Link>
+                                        <DropdownMenuItem className='cursor-pointer'>Your Blogs</DropdownMenuItem>
+                                        <DropdownMenuItem className='cursor-pointer'>Write Blogs</DropdownMenuItem>
+                                    </DropdownMenuContent>
+                                </DropdownMenu>
+
                             </div>
                         )}
                     </div>
@@ -180,9 +200,20 @@ function Navbar() {
                                         Logout
                                     </button>
                                     <div className="flex items-center pt-2">
-                                        <Avatar className="h-8 w-8 cursor-pointer border border-white/30">
-                                            {getAvatarContent()}
-                                        </Avatar>
+                                        <DropdownMenu>
+                                            <DropdownMenuTrigger>
+                                                <Avatar className="h-8 w-8 cursor-pointer border border-white/30 ">
+                                                    {getAvatarContent()}
+                                                </Avatar>
+                                            </DropdownMenuTrigger>
+                                            <DropdownMenuContent className='text-white bg-black'>
+                                                <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                                                <DropdownMenuSeparator />
+                                                <Link to='/dashboard'> <DropdownMenuItem className='cursor-pointer '>Profile</DropdownMenuItem></Link>
+                                                <DropdownMenuItem className='cursor-pointer'>Your Blogs</DropdownMenuItem>
+                                                <DropdownMenuItem className='cursor-pointer'>Write Blogs</DropdownMenuItem>
+                                            </DropdownMenuContent>
+                                        </DropdownMenu>
                                         <span className="ml-2 text-white">
                                             {user?.firstName} {user?.lastName}
                                         </span>
