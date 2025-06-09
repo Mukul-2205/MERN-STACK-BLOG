@@ -55,15 +55,6 @@ export default function Dashboard() {
             {/* Navigation Links */}
             <nav className="flex-1 overflow-y-auto px-2 space-y-1 pb-4">
               <Link
-                to="/profile"
-                className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/10 transition-colors"
-                onClick={() => setIsSidebarOpen(false)}
-              >
-                <User className="w-5 h-5 text-gray-300" />
-                <span className="text-gray-200">Profile</span>
-              </Link>
-
-              <Link
                 to="/write-blog"
                 className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/10 transition-colors"
                 onClick={() => setIsSidebarOpen(false)}
@@ -144,6 +135,10 @@ export default function Dashboard() {
                             <div className="grid gap-3">
                               <Label htmlFor="username-1">Bio</Label>
                               <Textarea id="bio" name="bio" placeholder="Your bio" />
+                            </div>
+                            <div className="grid gap-3">
+                              <Label htmlFor="username-1">Profile Photo</Label>
+                              <Input id='file' type='file' accept='image/*' className='bg-white cursor-pointer text-black'/>
                             </div>
                           </div>
                           <DialogFooter>

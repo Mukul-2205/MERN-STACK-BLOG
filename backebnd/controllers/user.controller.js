@@ -1,6 +1,7 @@
-
+import cloudinary from '../utils/cloudinary.js';
 import { User } from '../models/user.model.js';
 import bcrypt from 'bcrypt'
+import getDataURI from '../utils/dataURI.js';
 
 
 
@@ -153,5 +154,42 @@ export const logout=async(req,res)=>{
                     message: "Logged out successfully"
                 }
             )
+
+}
+
+
+export const updateProfile=async(req,res)=>{
+    try {
+        const userId=req.user._id
+        const {firstName, lastName, email, bio}=req.body
+        const file=req.file
+    
+        const fileURI=getDataURI(file)
+        const cloudResponse = await cloudinary.uploader.upload(fileURI)
+    
+        const user = await User.findById(userId).select('-password')
+        if(!user){
+            return res.status(400).json({
+                success: false,
+                message: "User not found"
+            })
+        }
+        if(firstName)user.firstName=firstName
+        if(lastName)user.lastName=lastName
+        if(email)user.email=email
+        if(bio)user.bio=bio
+        if(file)user.photoUrl=cloudResponse.secure_url
+    
+        await user.save()
+    
+        return res.status(200).json({
+            success: true,
+            message: "Profile updated successfully",
+            user
+
+        })
+    } catch (error) {
+        console.log(error);
+    }
 
 }

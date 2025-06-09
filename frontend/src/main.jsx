@@ -9,35 +9,41 @@ import Home from './components/Home/Home.jsx'
 import { Provider } from 'react-redux'
 import store from './Store/store'
 import Dashboard from './components/DashBoard/Dashboard'
-const router=createBrowserRouter([
+import { PersistGate } from 'redux-persist/integration/react'
+import { persistStore } from 'redux-persist'
+const router = createBrowserRouter([
   {
-    path:'/',
-    element: <App/>,
+    path: '/',
+    element: <App />,
     children: [
       {
         path: '/home',
-        element: <Home/>
+        element: <Home />
       },
       {
-        path:'/login',
-        element: <Login/>
+        path: '/login',
+        element: <Login />
       },
       {
         path: '/register',
-        element: <Register/>
+        element: <Register />
       },
       {
-        path:"/dashboard",
-        element:<Dashboard/>
+        path: "/dashboard",
+        element: <Dashboard />
       }
     ]
   }
 ])
 
+
+const perisitor=persistStore(store)
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <Provider store={store}>
-      <RouterProvider router={router}/>
+      <PersistGate loading={null} persistor={perisitor}>
+        <RouterProvider router={router} />
+      </PersistGate>
     </Provider>
   </StrictMode>
 )
