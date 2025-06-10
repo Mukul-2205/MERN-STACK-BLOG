@@ -4,6 +4,7 @@ import connectDB from './database/db.js'
 import cookieParser from 'cookie-parser' 
 import cors from 'cors'
 import userRoute from './routes/user.route.js'
+import blogRoute from './routes/blog.route.js'
 dotenv.config()
 const app = express()
 const PORT=process.env.PORT||3000
@@ -17,6 +18,7 @@ app.use(cors({
 app.use(express.urlencoded({extended:true}))
 
 app.use("/api/v1/user",userRoute)
+app.use("/api/v1/blog",blogRoute)
 
 app.listen(PORT,()=>{
     connectDB()
