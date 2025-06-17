@@ -13,6 +13,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import axiosInstance from '@/utils/axiosInstance';
 
 function Navbar() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -22,7 +23,7 @@ function Navbar() {
     const navigate = useNavigate();
     const handleLogout = async () => {
         try {
-            const res = await axios.post('http://localhost:8000/api/v1/user/logout', {}, { withCredentials: true })
+            const res = await axiosInstance.post('/user/logout')
             if (res.data.success) {
                 navigate('/home')
                 dispatch(authSliceLogout())
@@ -86,7 +87,7 @@ function Navbar() {
                                     <DropdownMenuContent className='text-white bg-black'>
                                         <DropdownMenuLabel>My Account</DropdownMenuLabel>
                                         <DropdownMenuSeparator />
-                                        <Link to='/dashboard'> <DropdownMenuItem className='cursor-pointer '>Profile</DropdownMenuItem></Link>
+                                        <Link to='/profile'> <DropdownMenuItem className='cursor-pointer '>Profile</DropdownMenuItem></Link>
                                         <DropdownMenuItem className='cursor-pointer'>Your Blogs</DropdownMenuItem>
                                         <DropdownMenuItem className='cursor-pointer'>Write Blogs</DropdownMenuItem>
                                     </DropdownMenuContent>
@@ -209,7 +210,7 @@ function Navbar() {
                                             <DropdownMenuContent className='text-white bg-black'>
                                                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
                                                 <DropdownMenuSeparator />
-                                                <Link to='/dashboard'> <DropdownMenuItem className='cursor-pointer '>Profile</DropdownMenuItem></Link>
+                                                <Link to='/profile'> <DropdownMenuItem className='cursor-pointer '>Profile</DropdownMenuItem></Link>
                                                 <DropdownMenuItem className='cursor-pointer'>Your Blogs</DropdownMenuItem>
                                                 <DropdownMenuItem className='cursor-pointer'>Write Blogs</DropdownMenuItem>
                                             </DropdownMenuContent>

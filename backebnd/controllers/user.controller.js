@@ -2,21 +2,21 @@ import cloudinary from '../utils/cloudinary.js';
 import { User } from '../models/user.model.js';
 import bcrypt from 'bcrypt'
 import getDataURI from '../utils/dataURI.js';
+import jwt from 'jsonwebtoken'
 
 
-
-const generateAccessAndRefreshToken = async(userId)=>{
+const generateAccessAndRefreshToken = async (userId) => {
     try {
-        const user=await User.findById(userId)
-        const accessToken=user.generateAccessToken()
-        const refreshToken=user.generateRefreshToken()
+        const user = await User.findById(userId)
+        const accessToken = user.generateAccessToken()
+        const refreshToken = user.generateRefreshToken()
 
-        user.refreshToken=refreshToken
-        await user.save({validateBeforeSave: false})
-        return {accessToken,refreshToken}
+        user.refreshToken = refreshToken
+        await user.save({ validateBeforeSave: false })
+        return { accessToken, refreshToken }
     } catch (error) {
         console.log(error);
-        throw new Error("Failed to generate tokens: ",error.message)
+        throw new Error("Failed to generate tokens: ", error.message)
     }
 }
 
@@ -29,9 +29,9 @@ export const register = async (req, res) => {
                 message: "All fields are required"
             })
         }
-    
+
         const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    
+
         if (!emailRegex.test(email)) {
             return res.status(400).json({
                 success: false,
@@ -44,7 +44,7 @@ export const register = async (req, res) => {
                 message: "Password must be of length 8 or more"
             })
         }
-    
+
         const emailAlreadyExists = await User.findOne({ email })
         if (emailAlreadyExists) {
             return res.status(400).json({
@@ -52,7 +52,7 @@ export const register = async (req, res) => {
                 message: "Email already exists"
             })
         }
-    
+
         const hashedPassword = await bcrypt.hash(password, 10)
         await User.create({
             firstName,
@@ -60,7 +60,7 @@ export const register = async (req, res) => {
             email,
             password: hashedPassword,
         })
-    
+
         return res.status(201).json({
             success: true,
             message: "User registered successfully"
@@ -69,15 +69,15 @@ export const register = async (req, res) => {
     } catch (error) {
         console.log(error);
         return res.status(400).json({
-            success:false,
-            message:"Failed to register"
+            success: false,
+            message: "Failed to register"
         })
     }
 }
 
-export const login = async(req,res)=>{
-    const {email,password}=req.body
-    if(!email || !password){
+export const login = async (req, res) => {
+    const { email, password } = req.body
+    if (!email || !password) {
         return res.status(400).json(
             {
                 success: false,
@@ -86,8 +86,8 @@ export const login = async(req,res)=>{
         )
     }
 
-    const user=await User.findOne({email});
-    if(!user){
+    const user = await User.findOne({ email });
+    if (!user) {
         return res.status(400).json(
             {
                 success: false,
@@ -96,8 +96,8 @@ export const login = async(req,res)=>{
         )
     }
 
-    const isPasswordValid= await bcrypt.compare(password,user.password);
-    if(!isPasswordValid){
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
         return res.status(400).json(
             {
                 success: false,
@@ -106,33 +106,33 @@ export const login = async(req,res)=>{
         )
     }
 
-    const {accessToken, refreshToken}=await generateAccessAndRefreshToken(user._id)
-    const loggedInUser=await User.findById(user._id).select("-password -refreshToken");
-    const options ={
+    const { accessToken, refreshToken } = await generateAccessAndRefreshToken(user._id)
+    const loggedInUser = await User.findById(user._id).select("-password -refreshToken");
+    const options = {
         httpOnly: true,
         secure: true
     }
 
     return res.status(200)
-            .cookie("accessToken",accessToken,options)
-            .cookie("refreshToken",refreshToken,options)
-            .json(
-                {
-                    success: true,
-                    message: `Welcome ${user.firstName} ${user.lastName} !!`,
-                    user: loggedInUser,
-                    refreshToken,
-                    accessToken
-                }
-            )
+        .cookie("accessToken", accessToken, options)
+        .cookie("refreshToken", refreshToken, options)
+        .json(
+            {
+                success: true,
+                message: `Welcome ${user.firstName} ${user.lastName} !!`,
+                user: loggedInUser,
+                refreshToken,
+                accessToken
+            }
+        )
 
 }
 
-export const logout=async(req,res)=>{
+export const logout = async (req, res) => {
     await User.findByIdAndUpdate(
         req.user._id,
         {
-            $unset:{
+            $unset: {
                 refreshToken: 1
             }
         },
@@ -140,48 +140,48 @@ export const logout=async(req,res)=>{
             new: true
         }
     )
-    const options ={
+    const options = {
         httpOnly: true,
         secure: true
     }
 
     return res.status(200)
-            .cookie("accessToken",options)
-            .cookie("refreshToken",options)
-            .json(
-                {
-                    success: true,
-                    message: "Logged out successfully"
-                }
-            )
+        .cookie("accessToken", options)
+        .cookie("refreshToken", options)
+        .json(
+            {
+                success: true,
+                message: "Logged out successfully"
+            }
+        )
 
 }
 
 
-export const updateProfile=async(req,res)=>{
+export const updateProfile = async (req, res) => {
     try {
-        const userId=req.user._id
-        const {firstName, lastName, email, bio}=req.body
-        const file=req.file
-    
-        const fileURI=getDataURI(file)
+        const userId = req.user._id
+        const { firstName, lastName, email, bio } = req.body
+        const file = req.file
+
+        const fileURI = getDataURI(file)
         const cloudResponse = await cloudinary.uploader.upload(fileURI)
-    
+
         const user = await User.findById(userId).select('-password')
-        if(!user){
+        if (!user) {
             return res.status(400).json({
                 success: false,
                 message: "User not found"
             })
         }
-        if(firstName)user.firstName=firstName
-        if(lastName)user.lastName=lastName
-        if(email)user.email=email
-        if(bio)user.bio=bio
-        if(file)user.photoUrl=cloudResponse.secure_url
-    
+        if (firstName) user.firstName = firstName
+        if (lastName) user.lastName = lastName
+        if (email) user.email = email
+        if (bio) user.bio = bio
+        if (file) user.photoUrl = cloudResponse.secure_url
+
         await user.save()
-    
+
         return res.status(200).json({
             success: true,
             message: "Profile updated successfully",
@@ -191,5 +191,66 @@ export const updateProfile=async(req,res)=>{
     } catch (error) {
         console.log(error);
     }
+
+}
+
+
+
+export const refreshAccessToken = async (req, res) => {
+    const incomingRefreshToken = req.cookies.refreshToken || req.body.refreshToken
+
+    if (!incomingRefreshToken) {
+        return res.status(401).json({
+            success: false,
+            message: "Unauthorized request"
+        })
+    }
+
+    try {
+        const decodedToken = jwt.verify(
+            incomingRefreshToken,
+            process.env.REFRESH_TOKEN_SECRET
+        )
+
+        const user = await User.findById(decodedToken?._id)
+
+        if (!user) {
+            return res.status(401).json({
+                success: false,
+                message: "Invalid refresh token"
+            })
+        }
+
+        if (incomingRefreshToken !== user?.refreshToken) {
+            return res.status(401).json({
+                success: false,
+                message: "Refresh token is expired or used"
+            })
+        }
+
+        const options = {
+            httpOnly: true,
+            secure: true
+        }
+
+        const { accessToken, newRefreshToken } = await generateAccessAndRefreshToken(user?._id)
+
+        return res
+            .status(200)
+            .cookie("accessToken", accessToken, options)
+            .cookie("refreshToken", newRefreshToken, options)
+            .json({
+                success: true,
+                accessToken,
+                refreshToken: newRefreshToken,
+                message: "Access token refreshed"
+            })
+    } catch (error) {
+        return res.status(401).json({
+            success: false,
+            message: error?.message || "Invalid refresh token"
+        })
+    }
+
 
 }

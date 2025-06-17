@@ -11,6 +11,8 @@ import store from './Store/store'
 import Dashboard from './components/DashBoard/Dashboard'
 import { PersistGate } from 'redux-persist/integration/react'
 import { persistStore } from 'redux-persist'
+import Layout from './components/Layout/Layout'
+import ProfilePage from './components/ProfilePage/ProfilePage'
 const router = createBrowserRouter([
   {
     path: '/',
@@ -29,15 +31,21 @@ const router = createBrowserRouter([
         element: <Register />
       },
       {
-        path: "/dashboard",
-        element: <Dashboard />
+        element: <Layout />,
+        children: [
+          {
+            path:'/profile',
+            element:<ProfilePage/>
+          }
+        ]
+
       }
     ]
   }
 ])
 
 
-const perisitor=persistStore(store)
+const perisitor = persistStore(store)
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <Provider store={store}>
