@@ -8,11 +8,12 @@ import Register from './components/RegisterUser/Register.jsx'
 import Home from './components/Home/Home.jsx'
 import { Provider } from 'react-redux'
 import store from './Store/store'
-import Dashboard from './components/DashBoard/Dashboard'
 import { PersistGate } from 'redux-persist/integration/react'
 import { persistStore } from 'redux-persist'
 import Layout from './components/Layout/Layout'
 import ProfilePage from './components/ProfilePage/ProfilePage'
+import CreateBlog from './components/CreateBlog/CreateBlog'
+import UpdateBlog from './components/UpdateBlog/UpdateBlog'
 const router = createBrowserRouter([
   {
     path: '/',
@@ -36,6 +37,14 @@ const router = createBrowserRouter([
           {
             path:'/profile',
             element:<ProfilePage/>
+          },
+          {
+            path:'/create-blog',
+            element: <CreateBlog/>
+          },
+          {
+            path: '/blog/update-blog/:blogId',
+            element: <UpdateBlog/>
           }
         ]
 

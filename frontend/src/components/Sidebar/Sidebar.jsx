@@ -19,12 +19,12 @@ export default function Sidebar({ isOpen, onClose }) {
         {/* Navigation Links */}
         <nav className="flex-1 overflow-y-auto px-2 space-y-1 pb-4">
           <Link
-            to="/write-blog"
+            to="/create-blog"
             className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/10 transition-colors"
             onClick={onClose}
           >
             <PenLine className="w-5 h-5 text-gray-300" />
-            <span className="text-gray-200">Write Blog</span>
+            <span className="text-gray-200">Create Blog</span>
           </Link>
 
           <Link

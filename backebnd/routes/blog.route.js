@@ -5,6 +5,6 @@ import { singleUpload } from '../middlewares/multer.middleware.js'
 const router=express.Router()
 
 router.route('/create-blog').post(verifyJWT, createBlog)
-router.route('/:blogId').put(verifyJWT, singleUpload, updateBlog)
+router.route('/update-blog/:blogId').put(verifyJWT, singleUpload, updateBlog)
 
 export default router

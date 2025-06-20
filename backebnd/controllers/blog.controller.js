@@ -5,17 +5,16 @@ import getDataURI from "../utils/dataURI.js";
 
 export const createBlog = async (req, res) => {
     try {
-        const { title, category } = req.body
-        if (!title || !category) {
+        const { title } = req.body
+        if (!title) {
             return res.status(400).json({
                 success: false,
-                message: "Both title and categories required"
+                message: "Title is required"
             })
         }
 
         const blog = await Blog.create({
             title,
-            category,
             author: req.user._id
         })
         return res.status(201).json({
