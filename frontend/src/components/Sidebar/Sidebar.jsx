@@ -28,7 +28,7 @@ export default function Sidebar({ isOpen, onClose }) {
           </Link>
 
           <Link
-            to="/your-blogs"
+            to="/blog/get-own-blogs"
             className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/10 transition-colors"
             onClick={onClose}
           >

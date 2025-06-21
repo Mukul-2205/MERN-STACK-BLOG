@@ -14,6 +14,8 @@ import Layout from './components/Layout/Layout'
 import ProfilePage from './components/ProfilePage/ProfilePage'
 import CreateBlog from './components/CreateBlog/CreateBlog'
 import UpdateBlog from './components/UpdateBlog/UpdateBlog'
+import YourBlogs from './components/YourBlogs/YourBlogs'
+import ViewBlog from './components/ViewBlog/ViewBlog'
 const router = createBrowserRouter([
   {
     path: '/',
@@ -32,6 +34,10 @@ const router = createBrowserRouter([
         element: <Register />
       },
       {
+        path: '/blog/:blogId',
+        element: <ViewBlog/>
+      },
+      {
         element: <Layout />,
         children: [
           {
@@ -45,6 +51,10 @@ const router = createBrowserRouter([
           {
             path: '/blog/update-blog/:blogId',
             element: <UpdateBlog/>
+          },
+          {
+            path: '/blog/get-own-blogs',
+            element: <YourBlogs/> 
           }
         ]
 
