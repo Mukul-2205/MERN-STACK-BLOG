@@ -1,3 +1,4 @@
+import { log } from "console";
 import { Blog } from "../models/blog.models.js";
 import cloudinary from "../utils/cloudinary.js";
 import getDataURI from "../utils/dataURI.js";
@@ -135,4 +136,149 @@ export const deleteBlog = async (req, res) => {
         success: true,
         message: "Blog deleted successfully!!"
     })
+}
+
+
+export const getPublishedBlog = async (_, res) => {
+    try {
+        const blogs = await Blog.find({ isPublished: true }).sort({ createdAt: -1 }).populate({
+            path: 'author',
+            select: 'firstName lastName photoUrl'
+        })
+        if (!blogs) {
+            return res.status(401).json({
+                success: false,
+                message: "Blog not found!!"
+            })
+        }
+
+        return res.status(200).json({
+            success: true,
+            message: "All Blogs fetched successfully!!"
+        })
+    } catch (error) {
+        console.log(error);
+        return res.status(401).json({
+            success: false,
+            message: "Error fetching the blogs!!"
+        })
+    }
+}
+
+
+export const togglePublishAndUnpublish = async (req, res) => {
+    try {
+        const { blogId } = req.params
+
+        const blog = await Blog.findById(blogId)
+        if (!blog) {
+            return res.status(401).json({
+                success: false,
+                message: "Blog not found!!"
+            })
+        }
+
+        let currentPublishStatus = blog.isPublished
+        blog.isPublished = !currentPublishStatus
+        await blog.save()
+
+        const statusMessage = blog.isPublished ? "Published" : "Unpublish"
+        return res.status(200).json({
+            success: true,
+            message: statusMessage
+        })
+    } catch (error) {
+        console.log(error);
+
+    }
+}
+
+export const likeBlog = async (req, res) => {
+    try {
+        const { blogId } = req.params;
+        const userId = req.user._id;
+
+        // Use findByIdAndUpdate for atomic operation
+        const blog = await Blog.findByIdAndUpdate(
+            blogId,
+            {
+                $addToSet: { likes: userId } // $addToSet prevents duplicates
+            },
+            { new: true } // Return the updated document
+        );
+
+        if (!blog) {
+            return res.status(404).json({
+                success: false,
+                message: "Blog not found!!"
+            });
+        }
+
+        return res.status(200).json({
+            success: true,
+            message: "Blog liked!!",
+            updatedBlog: blog
+        });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            success: false,
+            message: 'Unable to perform like on blog'
+        });
+    }
+};
+
+export const dislikeBlog = async (req, res) => {
+    try {
+        const { blogId } = req.params;
+        const userId = req.user._id;
+
+        // Use findByIdAndUpdate for atomic operation
+        const blog = await Blog.findByIdAndUpdate(
+            blogId,
+            {
+                $pull: { likes: userId }
+            },
+            { new: true } // Return the updated document
+        );
+
+        if (!blog) {
+            return res.status(404).json({
+                success: false,
+                message: "Blog not found!!"
+            });
+        }
+
+        return res.status(200).json({
+            success: true,
+            message: "Blog disliked!!",
+            updatedBlog: blog
+        });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            success: false,
+            message: 'Unable to perform dislike on blog'
+        });
+    }
+};
+
+export const getTotalBlogsLikes = async (req, res) => {
+    try {
+        const userId = req.user._id
+        const myBlogs = await Blog.find({ author: userId }).select('likes')
+        const totalLikes = myBlogs.reduce((acc, blogs) => acc + (blogs.likes?.length || 0), 0)
+
+        return res.status(200).json({
+            success: true,
+            totalLikes,
+            totalBlogs: myBlogs.length
+        })
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            success: false,
+            message: "Unable to fetch likes"
+        })
+    }
 }

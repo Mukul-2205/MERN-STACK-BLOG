@@ -10,79 +10,111 @@ import {
     SelectValue,
 } from "@/components/ui/select"
 import { useNavigate, useParams } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import axiosInstance from '@/utils/axiosInstance';
+import { setBlog } from '@/Store/blogSlice';
 function UpdateBlog() {
     const editor = useRef(null)
-    const navigate=useNavigate()
-    const params=useParams()
-    const id=params.blogId
-    const {blog}=useSelector(state=>state.blog)
-    const selectedBlog=blog.find(blog=>blog._id===id)
-    const [descriptionContent, setDescriptionContent]=useState(selectedBlog.description)
-    const [blogData, setBlogData]=useState({
+    const navigate = useNavigate()
+    const dispatch=useDispatch()
+    const params = useParams()
+    const id = params.blogId
+    const { blog } = useSelector(state => state.blog)
+    const selectedBlog = blog.find(blog => blog._id === id)
+    const [descriptionContent, setDescriptionContent] = useState(selectedBlog.description)
+    const [published, setPublished] = useState(selectedBlog?.isPublished)
+    const [blogData, setBlogData] = useState({
         title: selectedBlog?.title,
         subtitle: selectedBlog?.subtitle,
         description: descriptionContent,
         category: selectedBlog?.category
     })
     console.log(params);
-    const [previewThumbnail, setPreviewThumbnail]=useState(selectedBlog?.thumbnail)
+    const [previewThumbnail, setPreviewThumbnail] = useState(selectedBlog?.thumbnail)
 
-    const handleChange=(e)=>{
-        const {name,value}=e.target
-        setBlogData((prev)=>({
+    const handleChange = (e) => {
+        const { name, value } = e.target
+        setBlogData((prev) => ({
             ...prev,
-            [name]:value
+            [name]: value
         }))
     }
 
-    const handleSelectCategory=(value)=>{
-        setBlogData({...blogData, category: value})
+    const handleSelectCategory = (value) => {
+        setBlogData({ ...blogData, category: value })
     }
 
-    const handleThumbnail=(e)=>{
-        const file=e.target.files?.[0]
-        if(file){
-            setBlogData({...blogData, thumbnail: file})
-            const fileReader=new FileReader()
-            fileReader.onloadend=()=>setPreviewThumbnail(fileReader.result)
+    const handleThumbnail = (e) => {
+        const file = e.target.files?.[0]
+        if (file) {
+            setBlogData({ ...blogData, thumbnail: file })
+            const fileReader = new FileReader()
+            fileReader.onloadend = () => setPreviewThumbnail(fileReader.result)
             fileReader.readAsDataURL(file)
         }
     }
 
-    const handleSaveAndUpdateBlog=async ()=>{
-        const formData=new FormData()
-        formData.append('title',blogData.title)
+    const handleSaveAndUpdateBlog = async () => {
+        const formData = new FormData()
+        formData.append('title', blogData.title)
         formData.append('subtitle', blogData.subtitle)
         formData.append('description', descriptionContent)
-        formData.append('category',blogData.category)
+        formData.append('category', blogData.category)
         formData.append('file', blogData.thumbnail)
 
         try {
-            const res=await axiosInstance.put(`/blog/update-blog/${id}`,formData,{
+            const res = await axiosInstance.put(`/blog/update-blog/${id}`, formData, {
                 headers: {
-                    "Content-Type":"multipart/form-data"
+                    "Content-Type": "multipart/form-data"
                 },
                 withCredentials: true
             })
 
-            if(res.data.success){
+            if (res.data.success) {
                 alert('Blog saved and updated successfully!!')
+                navigate('/blog/get-own-blogs')
             }
         } catch (error) {
             console.log(error);
             alert('Failed to save and update blog!!')
         }
     }
-    const handlePublish = () => {
-        console.log("Published");
-        // Add publish logic
+    const handleTogglePublishAndUnpublish = async () => {
+        try {
+            const res = await axiosInstance.patch(`/blog/${id}`,
+                {},
+                { withCredentials: true }
+            )
+            if (res.data.success) {
+                setPublished(!published)
+                alert(res.data.message)
+                navigate('/blog/get-own-blogs')
+            }
+        } catch (error) {
+            console.log(error);
+            alert("Error while toggling status!")
+        }
     };
 
-    const handleUnpublish = () => {
-        console.log("Unpublished");
-        // Add unpublish logic
+    const handleRemoveBlog = async (blogId) => {
+
+        try {
+
+            const res = await axiosInstance.delete(`/blog/delete-blog/${blogId}`,null,{ withCredentials: true })
+            if (res.data.success) {
+                const updatedBlogs = blog.filter(blogs => blogs._id !== id)
+                dispatch(setBlog(updatedBlogs))
+                alert("Blog removed successfully!!")
+                navigate('/blog/get-own-blogs')
+            }
+            else {
+                alert("Unable to delete blog!!")
+            }
+        } catch (error) {
+            console.log(error);
+            alert("Error occured while removing blog!!")
+        }
+
     };
 
     return (
@@ -93,16 +125,18 @@ function UpdateBlog() {
                 {/* Publish/Unpublish buttons */}
                 <div className="flex gap-4 mb-6">
                     <button
-                        onClick={handlePublish}
+                        onClick={handleTogglePublishAndUnpublish}
                         className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md cursor-pointer"
                     >
-                        Publish
+                        {
+                            selectedBlog?.isPublished ? "UnPublished" : "Publish"
+                        }
                     </button>
                     <button
-                        onClick={handleUnpublish}
+                        onClick={()=>handleRemoveBlog(selectedBlog?._id)}
                         className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-md cursor-pointer"
                     >
-                        Unpublish
+                        Removeb Blog
                     </button>
                 </div>
 
@@ -134,7 +168,7 @@ function UpdateBlog() {
                     <JoditEditor
                         ref={editor}
                         value={blogData?.description}
-                        onChange={(newContent)=>setDescriptionContent(newContent)}
+                        onChange={(newContent) => setDescriptionContent(newContent)}
                         className='jodit_toolbar text-black'
                     />
 
@@ -171,8 +205,8 @@ function UpdateBlog() {
 
                     {
                         previewThumbnail && (
-                            <img 
-                                src={previewThumbnail} 
+                            <img
+                                src={previewThumbnail}
                                 className='w-70 h-55 m-1'
                             />
                         )
@@ -181,9 +215,9 @@ function UpdateBlog() {
                     <div className="mt-6">
                         <button
                             className="px-6 py-2 bg-black hover:bg-black text-white rounded-md cursor-pointer mr-2"
-                            onClick={()=>navigate(-1)}
+                            onClick={() => navigate(-1)}
                         >
-                           Back
+                            Back
                         </button>
                         <button
                             onClick={handleSaveAndUpdateBlog}
@@ -192,7 +226,7 @@ function UpdateBlog() {
                             Save Blog
                         </button>
 
-                        
+
                     </div>
                 </div>
             </div>
