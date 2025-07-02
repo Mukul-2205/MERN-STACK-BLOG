@@ -16,6 +16,7 @@ import CreateBlog from './components/CreateBlog/CreateBlog'
 import UpdateBlog from './components/UpdateBlog/UpdateBlog'
 import YourBlogs from './components/YourBlogs/YourBlogs'
 import ViewBlog from './components/ViewBlog/ViewBlog'
+import AllBlogs from './components/AllBlogs/AllBlogs'
 const router = createBrowserRouter([
   {
     path: '/',
@@ -36,6 +37,10 @@ const router = createBrowserRouter([
       {
         path: '/blog/:blogId',
         element: <ViewBlog/>
+      },
+      {
+        path: '/get-published-blogs',
+        element: <AllBlogs/>
       },
       {
         element: <Layout />,

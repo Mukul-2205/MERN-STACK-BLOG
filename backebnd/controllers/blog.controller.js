@@ -282,3 +282,30 @@ export const getTotalBlogsLikes = async (req, res) => {
         })
     }
 }
+
+export const getAllPublishedBlogs=async(req,res)=>{
+    try {
+        const blogs=await Blog.find({isPublished: true}).populate({
+            path: 'author',
+            select: "firstName lastName photoUrl"
+        })
+    
+        if(!blogs){
+            return res.status(404).json({
+                success: false,
+                message: "No blogs found"
+            })
+        }
+        return res.status(200).json({
+            success: true,
+            message: 'Published blogs fetched!!',
+            blogs
+        })
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            success: false,
+            message: 'Unable to fetch Published blogs!!'
+        })
+    }
+}

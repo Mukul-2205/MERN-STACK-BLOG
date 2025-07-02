@@ -1,6 +1,6 @@
 import express from 'express'
 import { verifyJWT } from '../middlewares/auth.middleware.js'
-import { createBlog, deleteBlog, dislikeBlog, getOwnBlogs, likeBlog, togglePublishAndUnpublish, updateBlog } from '../controllers/blog.controller.js'
+import { createBlog, deleteBlog, dislikeBlog, getAllPublishedBlogs, getOwnBlogs, likeBlog, togglePublishAndUnpublish, updateBlog } from '../controllers/blog.controller.js'
 import { singleUpload } from '../middlewares/multer.middleware.js'
 const router = express.Router()
 
@@ -11,4 +11,5 @@ router.route('/delete-blog/:blogId').delete(verifyJWT, deleteBlog)
 router.route('/:blogId/like').put(verifyJWT, likeBlog)
 router.route('/:blogId/dislike').put(verifyJWT, dislikeBlog)
 router.route('/:blogId').patch(verifyJWT, togglePublishAndUnpublish)
+router.route('/get-published-blogs').get(verifyJWT,getAllPublishedBlogs)
 export default router
