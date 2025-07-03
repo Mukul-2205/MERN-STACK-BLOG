@@ -33,7 +33,7 @@ export default function HeroSection() {
                             </Link>
                         ) : (
                             <Link
-                                to="/blogs"
+                                to="/get-published-blogs"
                                 className="px-4 py-2 text-white font-medium bg-pink-600 hover:bg-pink-700 rounded-md transition"
                             >
                                 See Blogs

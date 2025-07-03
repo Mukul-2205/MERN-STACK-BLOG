@@ -80,8 +80,8 @@ const handleLikeAndDislike = async () => {
               </BreadcrumbItem>
               <BreadcrumbSeparator className='text-white font-semibold' />
               <BreadcrumbItem>
-                <BreadcrumbLink asChild className='text-white font-semibold'>
-                  <Link to="/blogs">Blogs</Link>
+                <BreadcrumbLink asChild className='text-white font-semibold hover:text-white'>
+                  <Link to="/get-published-blogs">Blogs</Link>
                 </BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator className='text-white font-semibold' />

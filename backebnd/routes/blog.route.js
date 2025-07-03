@@ -11,5 +11,5 @@ router.route('/delete-blog/:blogId').delete(verifyJWT, deleteBlog)
 router.route('/:blogId/like').put(verifyJWT, likeBlog)
 router.route('/:blogId/dislike').put(verifyJWT, dislikeBlog)
 router.route('/:blogId').patch(verifyJWT, togglePublishAndUnpublish)
-router.route('/get-published-blogs').get(verifyJWT,getAllPublishedBlogs)
+router.route('/get-published-blogs').get(getAllPublishedBlogs)
 export default router

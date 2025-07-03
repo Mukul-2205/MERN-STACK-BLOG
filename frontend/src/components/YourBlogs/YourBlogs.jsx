@@ -24,7 +24,7 @@ import { Link, useNavigate } from 'react-router-dom'
 
 function YourBlogs() {
   const dispatch = useDispatch()
-  const navigate=useNavigate()
+  const navigate = useNavigate()
   const { blog } = useSelector(state => state.blog)
   const fetchOwnBlogs = async () => {
     try {
@@ -41,15 +41,15 @@ function YourBlogs() {
     }
   }
 
-  const deleteBlog=async(blogId)=>{
+  const deleteBlog = async (blogId) => {
     try {
-      const res=await axiosInstance.delete(`/blog/delete-blog/${blogId}`,{withCredentials: true})
-      if(res.data.success){
-        const updatedBlogs=blog.filter(blogs=>blogs._id!==blogId)
+      const res = await axiosInstance.delete(`/blog/delete-blog/${blogId}`, { withCredentials: true })
+      if (res.data.success) {
+        const updatedBlogs = blog.filter(blogs => blogs._id !== blogId)
         dispatch(setBlog(updatedBlogs))
         alert("Blog deleted successfully!!")
       }
-      else{
+      else {
         alert("Unable to delete blog!!")
       }
     } catch (error) {
@@ -58,7 +58,7 @@ function YourBlogs() {
     }
   }
   console.log(blog);
-  
+
   useEffect(() => {
     fetchOwnBlogs()
   }, [])
@@ -88,7 +88,7 @@ function YourBlogs() {
                         alt="thumbnail"
                         className="w-16 h-16 object-cover rounded-md border border-gray-600"
                       />
-                      <p className='text-white font-medium truncate max-w-xs cursor-pointer' onClick={()=>navigate(`/blog/${item._id}`)}>
+                      <p className='text-white font-medium truncate max-w-xs cursor-pointer' onClick={() => navigate(`/blog/${item._id}`)}>
                         {item?.title}
                       </p>
                     </TableCell>
@@ -104,8 +104,8 @@ function YourBlogs() {
                         <DropdownMenuContent className='text-white bg-zinc-900 border-zinc-700'>
                           <DropdownMenuLabel>Actions</DropdownMenuLabel>
                           <DropdownMenuSeparator />
-                          <DropdownMenuItem className='cursor-pointer hover:bg-zinc-800' onClick={()=>navigate(`/blog/update-blog/${item._id}`)}>Edit Blog</DropdownMenuItem>
-                          <DropdownMenuItem className='cursor-pointer hover:bg-zinc-800' onClick={()=>deleteBlog(item._id)}>Delete Blog</DropdownMenuItem>
+                          <DropdownMenuItem className='cursor-pointer hover:bg-zinc-800' onClick={() => navigate(`/blog/update-blog/${item._id}`)}>Edit Blog</DropdownMenuItem>
+                          <DropdownMenuItem className='cursor-pointer hover:bg-zinc-800' onClick={() => deleteBlog(item._id)}>Delete Blog</DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
                     </TableCell>

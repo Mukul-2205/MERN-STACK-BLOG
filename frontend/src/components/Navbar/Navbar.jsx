@@ -154,27 +154,20 @@ function Navbar() {
                     <div className="md:hidden pb-4">
                         <div className="flex flex-col space-y-3 pt-2">
                             <Link
-                                to="/"
+                                to="/home"
                                 onClick={() => setIsMenuOpen(false)}
                                 className="text-white hover:text-pink-400 transition font-medium"
                             >
                                 Home
                             </Link>
                             <Link
-                                to="/blogs"
+                                to="/get-published-blogs"
                                 onClick={() => setIsMenuOpen(false)}
                                 className="text-white hover:text-pink-400 transition font-medium"
                             >
                                 Blogs
                             </Link>
-                            <Link
-                                to="/about"
-                                onClick={() => setIsMenuOpen(false)}
-                                className="text-white hover:text-pink-400 transition font-medium"
-                            >
-                                About
-                            </Link>
-
+                           
                             {!isAuthenticated ? (
                                 <>
                                     <Link

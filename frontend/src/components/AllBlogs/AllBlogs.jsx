@@ -1,40 +1,34 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import BlogCard from '@/components/BlogCard/BlogCard'; // adjust path if needed
 import Navbar from '../Navbar/Navbar';
+import axiosInstance from '@/utils/axiosInstance';
+import { setBlog } from '@/Store/blogSlice';
 
 function AllBlogs() {
   const { user } = useSelector(state => state.auth);
+  const dispatch=useDispatch()
+  const {blog}=useSelector(state=>state.blog)
+  console.log(blog);
+  
 
-  const blogs = [
-    {
-      id: '1',
-      thumbnail: 'https://via.placeholder.com/600x300',
-      title: 'Exploring React Hooks',
-      author: 'Jane Doe',
-      date: '2025-07-01',
-      category: 'React',
-      subtitle: 'A dive into useState, useEffect, and custom hooks.',
-    },
-    {
-      id: '2',
-      thumbnail: 'https://via.placeholder.com/600x300',
-      title: 'Getting Started with Tailwind CSS',
-      author: 'John Smith',
-      date: '2025-06-20',
-      category: 'CSS',
-      subtitle: 'Simplify styling using utility-first CSS framework.',
-    },
-    {
-      id: '3',
-      thumbnail: 'https://via.placeholder.com/600x300',
-      title: 'Understanding Redux Toolkit',
-      author: 'Alice Johnson',
-      date: '2025-06-15',
-      category: 'Redux',
-      subtitle: 'How to manage app state efficiently using Redux Toolkit.',
-    },
-  ];
+  useEffect(()=>{
+    const getAllPublishedBlogs=async()=>{
+      try {
+        const res=await axiosInstance.get('/blog/get-published-blogs',{withCredentials: true})
+        if(res.data.success){
+          dispatch(setBlog(res.data.blogs))
+        } else{
+          alert("Unable to fetch published blogs")
+        }
+      } catch (error) {
+        console.log(error);
+        alert("Error while fetching blogs!!")
+      }
+    }
+
+    getAllPublishedBlogs()
+  }, [])
 
   return (
     <>
@@ -46,8 +40,8 @@ function AllBlogs() {
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {blogs.map((blog) => (
-              <BlogCard key={blog.id} blog={blog} />
+            {blog.map((blog) => (
+              <BlogCard key={blog._id} blog={blog} />
             ))}
           </div>
         )}
