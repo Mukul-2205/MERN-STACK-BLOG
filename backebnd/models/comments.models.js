@@ -14,10 +14,10 @@ const commentsSchema = new mongoose.Schema(
             type: mongoose.Schema.Types.ObjectId,
             ref: "User"
         },
-        likes: {
-            type: Array,
-            default: []
-        },
+        likes: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User"
+        }],
         numberOfLikes: {
             type: Number,
             default: 0
@@ -28,5 +28,5 @@ const commentsSchema = new mongoose.Schema(
     }
 )
 
-const Comments=mongoose.model('Comments',commentsSchema)
+const Comments = mongoose.model('Comments', commentsSchema)
 export default Comments

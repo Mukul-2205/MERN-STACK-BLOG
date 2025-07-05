@@ -23,7 +23,7 @@ app.use(express.urlencoded({extended:true}))
 app.use("/api/v1/user",userRoute)
 app.use("/api/v1/blog",blogRoute)
 app.use('/api/v1/auth', authRoute)
-app.use('/api/v1/comments',commentsRoute)
+app.use('/api/v1/comment',commentsRoute)
 
 app.listen(PORT,()=>{
     connectDB()

@@ -26,12 +26,11 @@ const blogSchema=new mongoose.Schema(
         likes: [{
             type: mongoose.Schema.Types.ObjectId,
             ref: 'User',
-            default: []
         }],
-        comments:{
+        comments:[{
             type:mongoose.Schema.Types.ObjectId,
             ref: 'Comments'
-        },
+        }],
         isPublished:{
             type:Boolean,
             default: false

@@ -1,5 +1,5 @@
 import { Blog } from '../models/blog.models.js'
-import Comments from '../models/comments.models'
+import Comments from '../models/comments.models.js'
 
 export const createComment = async (req, res) => {
     try {
@@ -83,7 +83,7 @@ export const deleteComment = async (req, res) => {
             })
         }
 
-        if (comment.userId.toString() !== userId) {
+        if (comment.userId?._id?.toString() !== userId.toString()) {
             return res.status(403).json({
                 success: false,
                 message: "Unauthorized to delete this comment"
@@ -92,7 +92,7 @@ export const deleteComment = async (req, res) => {
 
         const blogId = comment.postId
         await Comments.findByIdAndDelete(commentId)
-        await Blog.findByIdAndDelete(blogId, {
+        await Blog.updateOne({_id: blogId}, {
             $pull: { comments: commentId }
         })
 
@@ -123,7 +123,7 @@ export const editComment = async (req, res) => {
             })
         }
 
-        if (comment.userId.toString() !== userId) {
+        if (comment?.userId?._id?.toString() !== userId.toString()) {
             return res.status(403).json({
                 success: false,
                 message: "Unauthorized to edit this comment"
@@ -165,7 +165,7 @@ export const likeOrDislikeComment = async (req, res) => {
         const alreadyLiked = comment.likes.includes(userId)
 
         if (alreadyLiked) {
-            comment.likes = comment.likes.filter(id => id !== userId)
+            comment.likes = comment.likes.filter(id => id.toString() !== userId.toString())
             comment.numberOfLikes -= 1
         } else {
             comment.likes.push(userId)
