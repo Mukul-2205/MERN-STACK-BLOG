@@ -16,7 +16,7 @@ import { setBlog } from '@/Store/blogSlice';
 function UpdateBlog() {
     const editor = useRef(null)
     const navigate = useNavigate()
-    const dispatch=useDispatch()
+    const dispatch = useDispatch()
     const params = useParams()
     const id = params.blogId
     const { blog } = useSelector(state => state.blog)
@@ -55,13 +55,21 @@ function UpdateBlog() {
     }
 
     const handleSaveAndUpdateBlog = async () => {
+
+        if (!blogData.title?.trim() || !blogData.subtitle?.trim() || !descriptionContent?.trim() || !blogData.category) {
+            alert("All fields (title, subtitle, description, category) are required!");
+            return;
+        }
+
         const formData = new FormData()
         formData.append('title', blogData.title)
         formData.append('subtitle', blogData.subtitle)
         formData.append('description', descriptionContent)
         formData.append('category', blogData.category)
-        formData.append('file', blogData.thumbnail)
-
+        
+        if (blogData.thumbnail && blogData.thumbnail instanceof File) {
+            formData.append("file", blogData.thumbnail);
+        }
         try {
             const res = await axiosInstance.put(`/blog/update-blog/${id}`, formData, {
                 headers: {
@@ -100,7 +108,7 @@ function UpdateBlog() {
 
         try {
 
-            const res = await axiosInstance.delete(`/blog/delete-blog/${blogId}`,null,{ withCredentials: true })
+            const res = await axiosInstance.delete(`/blog/delete-blog/${blogId}`, null, { withCredentials: true })
             if (res.data.success) {
                 const updatedBlogs = blog.filter(blogs => blogs._id !== id)
                 dispatch(setBlog(updatedBlogs))
@@ -133,7 +141,7 @@ function UpdateBlog() {
                         }
                     </button>
                     <button
-                        onClick={()=>handleRemoveBlog(selectedBlog?._id)}
+                        onClick={() => handleRemoveBlog(selectedBlog?._id)}
                         className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-md cursor-pointer"
                     >
                         Removeb Blog

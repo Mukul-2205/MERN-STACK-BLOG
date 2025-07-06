@@ -30,6 +30,9 @@ app.use('/api/v1/comment',commentsRoute)
 
 
 app.use(express.static(path.join(_dirname, "/frontend/dist")))
+app.get(/(.*)/, (req, res) => {
+  res.sendFile(path.join(_dirname, "/frontend/dist/index.html"));
+});
 app.listen(PORT,()=>{
     connectDB()
     console.log(`Server listening at PORT: ${PORT}`);
