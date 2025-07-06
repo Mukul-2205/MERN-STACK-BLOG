@@ -70,8 +70,8 @@ function ViewBlog() {
 
   const numberOfComments = Array.isArray(comments) ?
     comments.filter(item => item.postId?.toString() === selectedBlog?._id?.toString())
-    : []; 
-  
+    : [];
+
   console.log("no of comments", numberOfComments);
 
   return (
@@ -117,7 +117,12 @@ function ViewBlog() {
                 {selectedBlog?.author?.firstName} {selectedBlog?.author?.lastName}
               </h3>
             </div>
-            <p>Published at {new Date(selectedBlog.createdAt).toLocaleDateString()}</p>
+            <p>
+              Published at{" "}
+              {selectedBlog?.createdAt
+                ? new Date(selectedBlog.createdAt).toLocaleDateString()
+                : "Unknown date"}
+            </p>
           </div>
 
           {/* Thumbnail */}
