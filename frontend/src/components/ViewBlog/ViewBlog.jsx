@@ -68,7 +68,7 @@ function ViewBlog() {
     }
   };
 
-  const numberOfComments=comments.map((item)=>item.postId===selectedBlog._id)
+  const numberOfComments=comments.map((item)=>item.postId.toString()===selectedBlog?._id?.toString())
   console.log("no of comments",numberOfComments);
   
   return (
