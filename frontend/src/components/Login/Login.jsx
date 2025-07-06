@@ -12,7 +12,7 @@ function Login() {
         e.preventDefault()
      
         try {
-            const res = await axios.post('http://localhost:8000/api/v1/user/login', { email, password }, {
+            const res = await axios.post('https://mern-stack-blog-mbxc.onrender.com/api/v1/user/login', { email, password }, {
                 headers: {
                     "Content-Type": "application/json"
                 },

@@ -55,7 +55,7 @@ export default function ProfilePage() {
       formData.append("file", input?.file)
     }
     try {
-      const res = await axios.put('http://localhost:8000/api/v1/user/updateprofile', formData,
+      const res = await axios.put('https://mern-stack-blog-mbxc.onrender.com/api/v1/user/updateprofile', formData,
         {
           headers: {
             "Content-Type": "multipart/form-data"
