@@ -21,6 +21,7 @@
     "@reduxjs/toolkit": "^2.8.2",
     "@tailwindcss/vite": "^4.1.8",
     "axios": "^1.9.0",
+    "backebnd": "file:..",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "jodit-react": "^5.2.19",
