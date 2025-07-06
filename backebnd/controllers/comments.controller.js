@@ -206,7 +206,7 @@ export const getAllCommentsOnMyBlogs = async (req, res) => {
             });
         }
 
-        const comments = await Comments.find({ postId: { $in: blogIds } }).populate({
+        const comments = await Comments.find({ postId: { $in: blogIds } }).sort({createdAt: -1}).populate({
             path: 'userId',
             select: 'firstName lastName email'
         }).populate(

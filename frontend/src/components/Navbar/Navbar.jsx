@@ -72,7 +72,6 @@ function Navbar() {
                     <div className="hidden md:flex space-x-6 items-center">
                         <Link to="/home" className="text-white hover:text-pink-400 transition font-medium cursor-pointer">Home</Link>
                         <Link to="/get-published-blogs" className="text-white hover:text-pink-400 transition font-medium cursor-pointer">Blogs</Link>
-                        <Link to="/about" className="text-white hover:text-pink-400 transition font-medium cursor-pointer">About</Link>
 
                         {!isAuthenticated ? (
                             <>

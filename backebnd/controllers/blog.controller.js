@@ -85,7 +85,7 @@ export const getOwnBlogs = async (req, res) => {
                 message: 'No user found / Invalid user => getOwnBlogs'
             })
         }
-        const blogs = await Blog.find({ author: userId }).populate({
+        const blogs = await Blog.find({ author: userId }).sort({createdAt: -1}).populate({
             path: 'author',
             select: 'firstName lastName photoUrl'
         })
@@ -285,7 +285,7 @@ export const getTotalBlogsLikes = async (req, res) => {
 
 export const getAllPublishedBlogs=async(req,res)=>{
     try {
-        const blogs=await Blog.find({isPublished: true}).populate({
+        const blogs=await Blog.find({isPublished: true}).sort({createdAt: -1}).populate({
             path: 'author',
             select: "firstName lastName photoUrl"
         })

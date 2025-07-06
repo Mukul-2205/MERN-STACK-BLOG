@@ -164,8 +164,13 @@ export const updateProfile = async (req, res) => {
         const { firstName, lastName, email, bio } = req.body
         const file = req.file
 
-        const fileURI = getDataURI(file)
-        const cloudResponse = await cloudinary.uploader.upload(fileURI)
+        let photoUrl;
+        if (file) {
+            const fileURI = getDataURI(file)
+            const cloudResponse = await cloudinary.uploader.upload(fileURI)
+            photoUrl=cloudResponse.secure_url
+        }
+
 
         const user = await User.findById(userId).select('-password')
         if (!user) {
@@ -178,7 +183,7 @@ export const updateProfile = async (req, res) => {
         if (lastName) user.lastName = lastName
         if (email) user.email = email
         if (bio) user.bio = bio
-        if (file) user.photoUrl = cloudResponse.secure_url
+        if (photoUrl) user.photoUrl = photoUrl
 
         await user.save()
 
