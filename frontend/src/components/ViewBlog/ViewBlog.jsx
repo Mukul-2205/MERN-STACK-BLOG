@@ -22,7 +22,7 @@ function ViewBlog() {
   const { blog } = useSelector(state => state.blog)
   const { user } = useSelector(state => state.auth)
   const {comments}=useSelector(state=>state.comments)
-  const selectedBlog = blog.find((blog) => blog._id === blogId)
+  const selectedBlog = blog.find((blog) => blog?._id.toString() === blogId.toString())
   const [liked, setLiked] = useState(selectedBlog?.likes?.includes(user?._id) || false)
   const [blogLikeCount, setBlogLikeCount] = useState(selectedBlog?.likes?.length || 0)
   const dispatch = useDispatch()
