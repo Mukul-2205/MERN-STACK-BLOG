@@ -21,14 +21,14 @@ function ViewBlog() {
   const blogId = params.blogId
   const { blog } = useSelector(state => state.blog)
   const { user } = useSelector(state => state.auth)
-  const {comments}=useSelector(state=>state.comments)
+  const { comments } = useSelector(state => state.comments)
   const selectedBlog = blog.find((blog) => blog?._id.toString() === blogId.toString())
   const [liked, setLiked] = useState(selectedBlog?.likes?.includes(user?._id) || false)
   const [blogLikeCount, setBlogLikeCount] = useState(selectedBlog?.likes?.length || 0)
   const dispatch = useDispatch()
 
   console.log(comments);
-  
+
   console.log(selectedBlog)
   const handleLikeAndDislike = async () => {
     try {
@@ -68,9 +68,12 @@ function ViewBlog() {
     }
   };
 
-  const numberOfComments=comments.map((item)=>item.postId.toString()===selectedBlog?._id?.toString())
-  console.log("no of comments",numberOfComments);
+  const numberOfComments = Array.isArray(comments) ?
+    comments.filter(item => item.postId?.toString() === selectedBlog?._id?.toString())
+    : []; 
   
+  console.log("no of comments", numberOfComments);
+
   return (
     <>
       <Navbar />
