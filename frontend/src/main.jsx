@@ -2,7 +2,7 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.jsx'
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom'
 import Login from './components/Login/Login.jsx'
 import Register from './components/RegisterUser/Register.jsx'
 import Home from './components/Home/Home.jsx'
@@ -17,11 +17,18 @@ import UpdateBlog from './components/UpdateBlog/UpdateBlog'
 import YourBlogs from './components/YourBlogs/YourBlogs'
 import ViewBlog from './components/ViewBlog/ViewBlog'
 import AllBlogs from './components/AllBlogs/AllBlogs'
+import Comments from './components/Comments/Comments'
+import SearchPage from './components/SearchPage/SearchPage'
 const router = createBrowserRouter([
   {
     path: '/',
     element: <App />,
     children: [
+
+       {
+        path: '/',
+        element: <Navigate to="/home" replace />
+      },
       {
         path: '/home',
         element: <Home />
@@ -36,30 +43,39 @@ const router = createBrowserRouter([
       },
       {
         path: '/blog/:blogId',
-        element: <ViewBlog/>
+        element: <ViewBlog />
       },
       {
         path: '/get-published-blogs',
-        element: <AllBlogs/>
+        element: <AllBlogs />
       },
+      {
+        path: '/search',
+        element: <SearchPage />
+      },
+
       {
         element: <Layout />,
         children: [
           {
-            path:'/profile',
-            element:<ProfilePage/>
+            path: '/profile',
+            element: <ProfilePage />
           },
           {
-            path:'/create-blog',
-            element: <CreateBlog/>
+            path: '/create-blog',
+            element: <CreateBlog />
           },
           {
             path: '/blog/update-blog/:blogId',
-            element: <UpdateBlog/>
+            element: <UpdateBlog />
           },
           {
             path: '/blog/get-own-blogs',
-            element: <YourBlogs/> 
+            element: <YourBlogs />
+          },
+          {
+            path: '/my-blogs/comments',
+            element: <Comments />
           }
         ]
 

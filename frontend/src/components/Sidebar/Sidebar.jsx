@@ -1,7 +1,7 @@
 // components/Sidebar/Sidebar.jsx
 import { Link } from 'react-router-dom'
 import { PenLine, FileText } from 'lucide-react'
-
+import { FaRegCommentAlt } from "react-icons/fa";
 export default function Sidebar({ isOpen, onClose }) {
   return (
     <aside
@@ -25,6 +25,15 @@ export default function Sidebar({ isOpen, onClose }) {
           >
             <PenLine className="w-5 h-5 text-gray-300" />
             <span className="text-gray-200">Create Blog</span>
+          </Link>
+
+          <Link
+            to="/my-blogs/comments"
+            className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/10 transition-colors"
+            onClick={onClose}
+          > 
+            <FaRegCommentAlt className="w-5 h-5 text-gray-300"/>
+            <span className='text-gray-200'>Comments</span>
           </Link>
 
           <Link

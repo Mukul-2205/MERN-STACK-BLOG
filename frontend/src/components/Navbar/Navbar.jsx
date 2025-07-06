@@ -19,8 +19,10 @@ function Navbar() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isSearchOpen, setIsSearchOpen] = useState(false);
     const { isAuthenticated, user } = useSelector((state) => state.auth);
+    const [searchTerm, setSearchTerm]=useState('')
     const dispatch = useDispatch();
     const navigate = useNavigate();
+
     const handleLogout = async () => {
         try {
             const res = await axiosInstance.post('/user/logout')
@@ -49,6 +51,13 @@ function Navbar() {
         );
     };
 
+    const handleSearch=(e)=>{
+        e.preventDefault()
+        if(searchTerm.trim()!==''){
+            navigate(`/search?query=${encodeURIComponent(searchTerm)}`)
+            setSearchTerm('')
+        }
+    }
     return (
         <nav className="fixed top-0 left-0 w-full z-50 bg-white/10 backdrop-blur-md border-b border-white/30 shadow-md">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -87,9 +96,18 @@ function Navbar() {
                                     <DropdownMenuContent className='text-white bg-black'>
                                         <DropdownMenuLabel>My Account</DropdownMenuLabel>
                                         <DropdownMenuSeparator />
-                                        <Link to='/profile'> <DropdownMenuItem className='cursor-pointer '>Profile</DropdownMenuItem></Link>
-                                        <DropdownMenuItem className='cursor-pointer'>Your Blogs</DropdownMenuItem>
-                                        <DropdownMenuItem className='cursor-pointer'>Write Blogs</DropdownMenuItem>
+                                        <DropdownMenuItem asChild>
+                                            <Link to="/profile" className="w-full">Profile</Link>
+                                        </DropdownMenuItem>
+                                        <DropdownMenuItem asChild>
+                                            <Link to="/blog/get-own-blogs" className="w-full">Your Blogs</Link>
+                                        </DropdownMenuItem>
+                                        <DropdownMenuItem asChild>
+                                            <Link to="/my-blogs/comments" className="w-full">Comments</Link>
+                                        </DropdownMenuItem>
+                                        <DropdownMenuItem asChild>
+                                            <Link to="/create-blog" className="w-full">Write Blogs</Link>
+                                        </DropdownMenuItem>
                                     </DropdownMenuContent>
                                 </DropdownMenu>
 
@@ -102,9 +120,14 @@ function Navbar() {
                         <input
                             type="text"
                             placeholder="Search..."
+                            name='search'
+                            value={searchTerm}
+                            onChange={(e)=>setSearchTerm(e.target.value)}
+                            
                             className="px-3 py-1.5 rounded-md bg-white/20 text-white placeholder-white/70 text-sm border border-white/40 focus:outline-none focus:ring-2 focus:ring-pink-500 transition"
                         />
                         <button
+                            onClick={handleSearch}
                             type="button"
                             className="px-3 py-1.5 text-white font-medium bg-pink-600 hover:bg-pink-700 rounded-md border border-white/40 shadow transition flex items-center gap-1 cursor-pointer"
                         >
@@ -137,10 +160,14 @@ function Navbar() {
                             <input
                                 type="text"
                                 placeholder="Search..."
+                                name='search'
+                                value={searchTerm}
+                                onChange={(e)=>setSearchTerm(e.target.value)}
                                 className="flex-1 px-3 py-1.5 rounded-md bg-white/20 text-white placeholder-white/70 text-sm border border-white/40 focus:outline-none focus:ring-2 focus:ring-pink-500 transition"
                             />
                             <button
                                 type="button"
+                                onClick={handleSearch}
                                 className="px-3 py-1.5 text-white font-medium bg-pink-600 hover:bg-pink-700 rounded-md border border-white/40 shadow transition flex items-center gap-1 cursor-pointer"
                             >
                                 <Search className="w-4 h-4" />
@@ -167,7 +194,7 @@ function Navbar() {
                             >
                                 Blogs
                             </Link>
-                           
+
                             {!isAuthenticated ? (
                                 <>
                                     <Link
@@ -203,10 +230,20 @@ function Navbar() {
                                             <DropdownMenuContent className='text-white bg-black'>
                                                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
                                                 <DropdownMenuSeparator />
-                                                <Link to='/profile'> <DropdownMenuItem className='cursor-pointer '>Profile</DropdownMenuItem></Link>
-                                                <DropdownMenuItem className='cursor-pointer'>Your Blogs</DropdownMenuItem>
-                                                <DropdownMenuItem className='cursor-pointer'>Write Blogs</DropdownMenuItem>
+                                                <DropdownMenuItem asChild>
+                                                    <Link to="/profile" className="w-full">Profile</Link>
+                                                </DropdownMenuItem>
+                                                <DropdownMenuItem asChild>
+                                                    <Link to="/blog/get-own-blogs" className="w-full">Your Blogs</Link>
+                                                </DropdownMenuItem>
+                                                <DropdownMenuItem asChild>
+                                                    <Link to="/my-blogs/comments" className="w-full">Comments</Link>
+                                                </DropdownMenuItem>
+                                                <DropdownMenuItem asChild>
+                                                    <Link to="/create-blog" className="w-full">Write Blogs</Link>
+                                                </DropdownMenuItem>
                                             </DropdownMenuContent>
+
                                         </DropdownMenu>
                                         <span className="ml-2 text-white">
                                             {user?.firstName} {user?.lastName}
